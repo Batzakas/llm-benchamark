@@ -58,7 +58,7 @@ class LLMUser(HttpUser):
         ) as response:
             end_time = time.time()  # Medir tempo final
             request_duration = end_time - start_time
-            
+            # Se respondido corretamente, podemos analisar o throughput e a latencia
             if response.status_code == 200:
                 try:
 
