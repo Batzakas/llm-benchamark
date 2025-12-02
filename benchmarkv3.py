@@ -543,7 +543,7 @@ def main():
         print(f"Max prompts: {max_prompts}")
     print(f"Dry run: {dry_run}")
 
-    # Load prompts
+    # Load prompts do dataset
     if use_dataset:
         dataset_entries = load_prompts_from_dataset(input_dataset_path)
         if not dataset_entries:
@@ -551,20 +551,18 @@ def main():
             return
         prompts_data = dataset_entries
     else:
-        # Usar prompts padrão
+        # Usar prompts padrao
         prompts_data = [
             DatasetEntry(id="default_1", prompt="Why is the sky blue?", metadata={"source": "default"}),
             DatasetEntry(id="default_2", prompt="Write a report on the financials of Apple Inc.", metadata={"source": "default"})
         ]
     
-    # Limitar número de prompts se especificado
     if max_prompts and len(prompts_data) > max_prompts:
         print(f"Limiting to {max_prompts} prompts (from {len(prompts_data)})")
         prompts_data = prompts_data[:max_prompts]
     
     print(f"Using {len(prompts_data)} prompts")
 
-    # Get models to evaluate
     model_names = get_benchmark_models(
         skip_models=skip_models, 
         specified_models=args.models
@@ -582,7 +580,6 @@ def main():
         print("\nExiting dry run.")
         return
 
-    # Clear output file if it exists
     try:
         open(output_dataset_path, 'w').close()
         print(f"Cleared output file: {output_dataset_path}")
@@ -611,10 +608,9 @@ def main():
                 print(f"Prompt: {prompt_text[:100]}..." if len(prompt_text) > 100 else f"Prompt: {prompt_text}")
                 print(f"{'='*60}")
             else:
-                # Mostrar progresso básico
+                # Mostrar progresso basico
                 print(f"  [{prompt_idx}/{len(prompts_data)}] Processing prompt '{prompt_id}'...", end="", flush=True)
             
-            # Run benchmark
             response = run_benchmark_direct_api(
                 model_name, 
                 prompt_text, 
@@ -625,10 +621,8 @@ def main():
             if response:
                 responses.append(response)
                 
-                # Extract metrics
                 metrics = extract_metrics(response)
                 
-                # Create output entry
                 output_entry = OutputEntry(
                     id=prompt_id,
                     model=model_name,
@@ -642,7 +636,6 @@ def main():
                     }
                 )
                 
-                # Save to output dataset
                 save_output_to_dataset(output_entry, output_dataset_path)
                 
                 if not verbose:
@@ -658,12 +651,10 @@ def main():
         
         benchmarks[model_name] = responses
         
-        # Calculate and display average stats for this model
         if responses:
             print(f"\nSummary for {model_name}:")
             average_stats(responses)
 
-    # Final summary
     print(f"\n{'='*60}")
     print("BENCHMARK COMPLETED")
     print(f"{'='*60}")
