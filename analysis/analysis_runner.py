@@ -4,6 +4,8 @@ from statsmodels.formula.api import ols
 import os
 import warnings
 
+from assumptions import check_assumptions
+
 warnings.simplefilter('ignore')
 
 def get_formula(block_name: str) -> str:
@@ -43,6 +45,11 @@ def run_analysis(input_file: str, output_file: str):
             try:
                 model = ols(formula, data=block_df).fit()
                 
+                try:
+                    check_assumptions(model, metric, block)
+                except Exception as diag_e:
+                    print(f"    Diagnostic check failed: {diag_e}")
+                    
                 anova_table = sm.stats.anova_lm(model, typ=3)
                 
                 for source, row in anova_table.iterrows():
