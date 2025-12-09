@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap');
+
+:root {
+    --bg: #0a0014;
+    --panel: #120022;
+    --neon1: #00eaff;
+    --neon2: #ff00f7;
+    --neon3: #8c00ff;
+    --text: #e0d7ff;
+    --scanline: rgba(255,255,255,0.025);
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--text);
+    overflow-x: hidden;
+}
+
+body::after {
+    content: "";
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+        to bottom,
+        var(--scanline) 0px,
+        transparent 2px,
+        transparent 4px
+    );
+    opacity: .25;
+    z-index: 100;
+}
+
+.header {
+    padding: 20px;
+    text-align: center;
+    background: linear-gradient(90deg, var(--neon1), var(--neon2));
+    -webkit-background-clip: text;
+    color: transparent;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 3px;
+    font-size: 42px;
+    animation: glowHeader 2s infinite alternate;
+}
+
+@keyframes glowHeader {
+    0% { text-shadow: 0 0 10px var(--neon2); }
+    100% { text-shadow: 0 0 25px var(--neon1); }
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 15px 10px;
+    flex-wrap: wrap;
+}
+
+.panel {
+    background: var(--panel);
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 2px solid var(--neon3);
+    box-shadow: 0 0 15px var(--neon3);
+    min-width: 250px;
+    font-size: 15px;
+    animation: panelPulse 3s infinite alternate;
+}
+
+@keyframes panelPulse {
+    0% { box-shadow: 0 0 10px var(--neon3); }
+    100% { box-shadow: 0 0 20px var(--neon1); }
+}
+
+.charts-grid {
+    margin: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 25px;
+    padding-bottom: 40px;
+}
+
+.chart-block h2 {
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: 20px;
+    color: var(--neon1);
+    text-shadow: 0 0 10px var(--neon2);
+}
+
+canvas {
+    background: #0f001c;
+    border-radius: 10px;
+    padding: 10px;
+    border: 2px solid var(--neon2);
+    box-shadow: 0 0 15px var(--neon2), inset 0 0 40px rgba(255,0,255,0.1);
+    animation: canvasGlow 2.5s infinite alternate;
+}
+
+@keyframes canvasGlow {
+    0% { box-shadow: 0 0 10px var(--neon2); }
+    100% { box-shadow: 0 0 25px var(--neon1); }
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--neon2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000;
+}
+
+.panel:hover, canvas:hover {
+    transform: scale(1.03);
+    transition: 0.2s;
+}
+
+/* FULLSCREEN MODE */
+
+#fullscreenViewer {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 0, 20, 0.95);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+}
+
+#fullscreenViewer.active {
+    display: flex;
+    animation: fadeIn 0.2s ease-out;
+}
+
+#fullscreenViewer canvas {
+    width: 90vw !important;
+    height: 90vh !important;
+    background: #0f001c;
+    border: 3px solid var(--neon1);
+    box-shadow: 0 0 35px var(--neon2);
+    border-radius: 15px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 500px) {
+    .header { font-size: 30px; }
+    .panel { min-width: 90%; }
+}
+
+
+
+
+
+
